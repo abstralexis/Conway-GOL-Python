@@ -12,18 +12,23 @@ HEIGHT = 500
 CLOCK = pygame.time.Clock()
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-pygame.display.set_caption("Conway's Game of Life") 
+pygame.display.set_caption("Life") 
 pygame.init
 
 def main() -> None:   
     array: np.ndarray = new_array()
     seed_matrix(array)
     running = True
+    generations = 0
     while running:
         handle_events()
         array = process_matrix(array)
         draw(array)
-        CLOCK.tick(1)
+
+        generations += 1
+        pygame.display.set_caption(f"Life | Generations: {generations}") 
+
+        CLOCK.tick(10)
         
 def handle_events() -> None:
     for event in pygame.event.get():
@@ -73,13 +78,6 @@ def process_tile(matrix: np.ndarray, i: int, j: int) -> None:
             matrix[i][j] = 1
 
 def process_matrix(matrix: np.ndarray) -> np.ndarray:
-    print(get_neighbours(matrix, 20, 20).count(1))
-    print(get_neighbours(matrix, 21, 20).count(1))
-    print(get_neighbours(matrix, 22, 20).count(1))
-    print(get_neighbours(matrix, 20, 20))
-    print(get_neighbours(matrix, 21, 20))
-    print(get_neighbours(matrix, 22, 20))
-
     new = matrix.copy()
 
     for i, row in enumerate(new):

@@ -17,7 +17,7 @@ pygame.init
 
 def main() -> None:   
     array: np.ndarray = new_array()
-    seed_matrix(array)
+    array = read_seed()
     running = True
     generations = 0
     while running:
@@ -28,7 +28,7 @@ def main() -> None:
         generations += 1
         pygame.display.set_caption(f"Life | Generations: {generations}") 
 
-        CLOCK.tick(10)
+        CLOCK.tick(12)
         
 def handle_events() -> None:
     for event in pygame.event.get():
@@ -122,18 +122,30 @@ def get_neighbours(array: np.ndarray, i: int, j :int) -> list:
         array[i][j-1]
     ]
     
-def seed_matrix(matrix: np.ndarray):
-    try:
-        matrix[5][5] = 1
-        matrix[5][6] = 1
-        matrix[6][6] = 1
-        matrix[6][5] = 1
+# def seed_matrix(matrix: np.ndarray):
+#     try:
+#         matrix[5][5] = 1
+#         matrix[5][6] = 1
+#         matrix[6][6] = 1
+#         matrix[6][5] = 1
         
-        matrix[20][20] = 1
-        matrix[21][20] = 1
-        matrix[22][20] = 1
-    finally:
-        pass
+#         matrix[20][20] = 1
+#         matrix[21][20] = 1
+#         matrix[22][20] = 1
+#     finally:
+#         pass
+
+def read_seed() -> np.ndarray:
+    seed_matrix = []
+    with open("seed.txt", "r") as seedfile:
+        seed = seedfile.read().split(",")
+        for i in range(100):
+            row = []
+            for j in range(100):
+                index = (i*100) + j
+                row.append(float(seed[index]))
+            seed_matrix.append(row)
+    return np.asarray(seed_matrix)
         
 if __name__ == "__main__":
     main()

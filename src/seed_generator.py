@@ -49,6 +49,7 @@ def handle_events(matrix: np.ndarray) -> None:
                     seed += f"{j},"
 
             seedfile.write(seed)
+        print("Write successful")
             
 def draw(matrix: np.ndarray) -> None:
     WIN.fill(WHITE)

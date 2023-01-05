@@ -13,15 +13,14 @@ CLOCK = pygame.time.Clock()
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("Life") 
-pygame.init
+pygame.init()
 
 def main() -> None:
     """
     Main function for the Game of Life
     """
-    # Read the seed file to a new array
-    array: np.ndarray = new_array()     
-    array = read_seed()
+    # Read the seed file to a new array   
+    array: np.ndarray = read_seed()
 
     # Main loop
     running = True
@@ -64,12 +63,6 @@ def draw(matrix: np.ndarray) -> None:
                 pygame.draw.rect(WIN, BLACK, rect)
 
     pygame.display.flip()
-    
-def new_array() -> np.ndarray:
-    """
-    Returns a new (100, 100) ndarray
-    """
-    return np.zeros((100, 100))
 
 def process_matrix(matrix: np.ndarray) -> np.ndarray:
     """

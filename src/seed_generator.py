@@ -1,4 +1,5 @@
 import sys
+import time
 
 import numpy as np
 
@@ -17,6 +18,8 @@ pygame.font.init()
 SYSFONT = pygame.font.SysFont(pygame.font.get_default_font(), 18)
 mode = "draw"
 
+WRITTEN = False
+
 pygame.display.set_caption("Life seed generator") 
 pygame.init()
 
@@ -28,15 +31,15 @@ def main() -> None:
     # Main loop handles events and draws array at 60 fps
     running = True                          
     while running:
-        handle_events(array)                
         draw(array) 
+        handle_events(array)                
         CLOCK.tick(60)
         
 def handle_events(matrix: np.ndarray) -> None:
     """
     Handles window events e.g inputs
     """
-    global mode
+    global mode, WRITTEN
     for event in pygame.event.get():
         # Exit process on window close
         if event.type == pygame.QUIT:
@@ -58,15 +61,17 @@ def handle_events(matrix: np.ndarray) -> None:
                     seed += f"{j},"
 
             seedfile.write(seed)
-        print("Write successful")
+            WRITTEN = True
         
     # Click and drag
     mousebuttons = pygame.mouse.get_pressed()
     if mousebuttons[0]: # Left mouse button
         x, y = pygame.mouse.get_pos()
-        i = y // 5
-        j = x // 5
-        matrix[i][j] = 1 if mode == "draw" else 0
+        if not(x > WIDTH or x < 0 or y > HEIGHT or y < 0):
+            i = y // 5
+            j = x // 5
+            matrix[i][j] = 1 if mode == "draw" else 0
+            WRITTEN = False
             
 def draw(matrix: np.ndarray) -> None:
     """
@@ -81,6 +86,11 @@ def draw(matrix: np.ndarray) -> None:
             if col == 1:
                 rect = pygame.rect.Rect(x, y, 5, 5)
                 pygame.draw.rect(WIN, BLACK, rect)
+                
+    savestatus = "Write successful" if WRITTEN else "Unsaved Changes"
+    text = SYSFONT.render(savestatus, True, GREY)
+    WIN.blit(text, (5, HEIGHT - 20))
+        
 
     draw_mode_text(mode)
     pygame.display.flip()
